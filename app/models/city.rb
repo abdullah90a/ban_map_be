@@ -3,7 +3,7 @@
 class City < ApplicationRecord
   belongs_to :state
   has_one :ban
-  has_one :facilities
+  has_one :facility
   has_many :lobsters
   has_many :customers
   has_many :composters

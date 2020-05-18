@@ -41,9 +41,10 @@ end
 ban_data = File.read(Rails.root.join("db/json/bans.json"))
 bans = JSON.parse(ban_data)
 bans.each do |ban|
+  target_state = created_states[ban["State"]]
   capitalized_city_name = ban["City"].split.map(&:capitalize).join(' ')
-  city = City.find_by(name: capitalized_city_name)
-  next if city.nil?
+  city = target_state.cities.find_by(name: capitalized_city_name)
+  next if city.nil? || city.ban.present?
 
   city.ban = Ban.create(
     enacted: ban["If applicable, date enacted "],
@@ -81,10 +82,10 @@ composters.each do |composter|
   )
 end
 
-facility_data = File.read(Rails.root.join("db/json/facilitys.json"))
+facility_data = File.read(Rails.root.join("db/json/facilities.json"))
 facilities = JSON.parse(facility_data)
 facilities.each do |facility|
-  facility_state = created_states.find { |state| state.code == facility["State"] }
+  facility_state = created_states[facility["State"]]
   city = City.find_by(
     name: facility["City"],
     state_id: facility_state.id
