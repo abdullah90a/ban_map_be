@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_17_202652) do
+ActiveRecord::Schema.define(version: 2020_05_18_142126) do
 
   create_table "bans", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.date "enacted"
@@ -33,6 +33,33 @@ ActiveRecord::Schema.define(version: 2020_05_17_202652) do
     t.text "zips", null: false
     t.integer "density", default: 0, null: false
     t.string "county", default: "", null: false
+    t.bigint "state_id"
+    t.index ["state_id"], name: "index_cities_on_state_id"
+  end
+
+  create_table "composters", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "url", default: "", null: false
+    t.string "email", default: "", null: false
+    t.string "phone", default: "", null: false
+    t.boolean "active", null: false
+    t.bigint "city_id"
+    t.index ["city_id"], name: "index_composters_on_city_id"
+  end
+
+  create_table "customers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "zip", default: "", null: false
+    t.bigint "city_id"
+    t.index ["city_id"], name: "index_customers_on_city_id"
+  end
+
+  create_table "facilities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "address", null: false
+    t.string "postal_code", null: false
+    t.string "capability", null: false
+    t.bigint "city_id"
+    t.index ["city_id"], name: "index_facilities_on_city_id"
   end
 
   create_table "lobsters", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -45,6 +72,15 @@ ActiveRecord::Schema.define(version: 2020_05_17_202652) do
     t.index ["city_id"], name: "index_lobsters_on_city_id"
   end
 
+  create_table "states", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "code", null: false
+  end
+
   add_foreign_key "bans", "cities"
+  add_foreign_key "cities", "states"
+  add_foreign_key "composters", "cities"
+  add_foreign_key "customers", "cities"
+  add_foreign_key "facilities", "cities"
   add_foreign_key "lobsters", "cities"
 end

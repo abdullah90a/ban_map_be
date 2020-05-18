@@ -8,18 +8,34 @@
 
 require "json"
 
+state_data = File.read(Rails.root.join("db/json/states.json"))
+states = JSON.parse(state_data)
+created_states = {}
+states.each do |state|
+  new_state = State.create(
+    name: state["name"],
+    code: state["short"]
+  )
+  created_states[new_state.code] = new_state
+end
+
 city_data = File.read(Rails.root.join("db/json/cities.json"))
 cities = JSON.parse(city_data)
 cities.each do |city|
-  City.create(
-    county: city["county_name"],
-    density: city["density"],
-    latitude: city["lat"],
-    longitude: city["lng"],
-    name: city["city"],
-    population: city["population"],
-    zips: city["zips"]
-  )
+  target_state = created_states[city["state_id"]]
+  next if target_state.nil?
+
+  target_state
+    .cities
+    .create(
+      county: city["county_name"],
+      density: city["density"],
+      latitude: city["lat"],
+      longitude: city["lng"],
+      name: city["city"],
+      population: city["population"],
+      zips: city["zips"]
+    )
 end
 
 ban_data = File.read(Rails.root.join("db/json/bans.json"))
@@ -30,7 +46,6 @@ bans.each do |ban|
   next if city.nil?
 
   city.ban = Ban.create(
-    city_id: city.id,
     enacted: ban["If applicable, date enacted "],
     proposed: ban["If applicable, date proposed"],
     ban_type: ban["Type"],
@@ -50,3 +65,48 @@ lobsters.each do |lobster|
     phone: lobster["Primary Phone"]
   )
 end
+
+composter_data = File.read(Rails.root.join("db/json/composters.json"))
+composters = JSON.parse(composter_data)
+composters.each do |composter|
+  city = City.find_by(latitude: composter["Lat"], longitude: composter["Longitude"])
+  next if city.nil?
+
+  city.composters.create(
+    name: composter["Name"],
+    url: composter["URL"],
+    email: composter["Email"],
+    phone: composter["Phone"],
+    active: composter["In_Business"]
+  )
+end
+
+facility_data = File.read(Rails.root.join("db/json/facilitys.json"))
+facilities = JSON.parse(facility_data)
+facilities.each do |facility|
+  facility_state = created_states.find { |state| state.code == facility["State"] }
+  city = City.find_by(
+    name: facility["City"],
+    state_id: facility_state.id
+  )
+  next if city.nil?
+
+  city.facility = Facility.create(
+    name: facility["Facility"],
+    address: facility["Address"],
+    postal_code: facility["Postal Code"],
+    capability: facility["Capability"]
+  )
+end
+
+customer_data = File.read(Rails.root.join("db/json/customers.json"))
+customers = JSON.parse(customer_data)
+customers.each do |customer|
+  city = City.find_by(latitude: customer["lat"], longitude: customer["lng"])
+  next if city.nil?
+
+  city.customers.create(
+    zip: customer["Zip Code"]
+  )
+end
+
