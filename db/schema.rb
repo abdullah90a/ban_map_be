@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(version: 2020_05_18_142126) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["city_id"], name: "index_lobsters_on_city_id"
+    t.index ["city_id"], name: "index_lobsters_on_city_id"
   end
 
   create_table "states", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|

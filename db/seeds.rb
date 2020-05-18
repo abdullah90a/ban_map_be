@@ -55,6 +55,7 @@ bans.each do |ban|
 end
 
 lobster_data = File.read(Rails.root.join("db/json/lobsters.json"))
+
 lobsters = JSON.parse(lobster_data)
 lobsters.each do |lobster|
   city = City.find_by(latitude: lobster["lat"], longitude: lobster["lng"])

@@ -1,0 +1,16 @@
+<h2>Updated Data for <%= @city.name %></h2>
+<table>
+  <tr>
+    <td>Coordinates</td><td><%= "#{@city.latitude}, #{@city.longitude}" %></td>
+  </tr>
+  <tr>
+    <td>Population</td><td><%= @city.population %></td>
+  </tr>
+  <tr>
+    <td>Density</td><td><%= @city.density %></td>
+  </tr>
+  <tr>
+    <td>Zips</td><td><%= @city.zips %></td>
+  </tr>
+</table>
+<a href="http://localhost:3000">Back to City Search</a>

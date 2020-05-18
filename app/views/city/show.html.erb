@@ -1,0 +1,64 @@
+<h2>Update Data for <%= @city.name %></h2>
+
+<form id="city" method="post" action="update">
+  <input type="number" name="id" id="city_id" hidden value="<%= @city.id %>">
+  <div style="margin-top: 1rem;">
+    <label for="name">Name</label>
+    <input type="text" name="name" id="city_name" required value="<%= @city.name %>">
+  </div>
+  <div style="margin-top: 1rem;">
+    <label for="latitude">Latitude</label>
+    <input type="number" name="latitude" id="latitude" required value="<%= @city.latitude %>">
+  </div>
+  <div style="margin-top: 1rem;">
+    <label for="longitude">Longitude</label>
+    <input type="number" name="longitude" id="longitude" required value="<%= @city.longitude %>">
+  </div>
+  <div style="margin-top: 1rem;">
+    <label for="population">Population</label>
+    <input type="number" name="population" id="population" required value="<%= @city.population %>">
+  </div>
+  <div style="margin-top: 1rem;">
+    <label for="density">Density</label>
+    <input type="number" name="density" id="density" required value="<%= @city.density %>">
+  </div>
+  <div style="margin-top: 1rem;">
+    <label for="zips">Zip Codes</label>
+    <textarea name="zips" id="zips" required><%= @city.zips %></textarea>
+  </div>
+  <input style="margin-top: 1rem;" type="submit">
+</form>
+<% if @city.ban.present? %>
+  <h3 style="margin-top: 3rem;">Ban Data</h3>
+  <table>
+    <tr>
+      <td>Type</td><td><%= @city.ban.ban_type %></td>
+    </tr>
+    <tr>
+      <td>Stage</td><td><%= @city.ban.stage %></td>
+    </tr>
+    <tr>
+      <td>Propsed</td><td><%= @city.ban.proposed %></td>
+    </tr>
+    <tr>
+      <td>Enacted</td><td><%= @city.ban.enacted %></td>
+    </tr>
+  </table>
+<!--  <form id="ban" method="post"></form>-->
+<% end %>
+<% if @city.lobsters.present? %>
+  <%= @city.lobsters.to_s %>
+<!--  <form id="lobsters" method="post"></form>-->
+<% end %>
+<% if @city.composters.present? %>
+  <%= @city.composters.to_s %>
+<!--  <form id="composters" method="post"></form>-->
+<% end %>
+<% if @city.customers.present? %>
+  <%= @city.customers.to_s %>
+<!--  <form id="customers" method="post"></form>-->
+<% end %>
+<% if @city.facility.present? %>
+  <%= @city.facility.to_s %>
+<!--  <form id="facility" method="post"></form>-->
+<% end %>

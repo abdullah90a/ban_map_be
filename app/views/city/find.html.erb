@@ -1,0 +1,8 @@
+<h2>Results</h2>
+<ul>
+  <% @find_result.each do |city| %>
+    <li style="margin-top: 1rem;">
+      <h3><%= link_to "#{city.name}", city_path(city) %></h3>
+    </li>
+  <% end %>
+</ul>

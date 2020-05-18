@@ -2,7 +2,10 @@
 
 Rails.application.routes.draw do
   get 'welcome/index'
+
   post 'city/find'
+  post 'city/update'
+
   post 'lobster/find'
   post 'ban/find'
 
